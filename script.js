@@ -227,3 +227,62 @@ function baixarCSV(conteudo) {
 
   URL.revokeObjectURL(url);
 }
+
+db.collection("marcacoes").onSnapshot(snapshot => {
+  snapshot.forEach(doc => {
+    const index = doc.id;
+    const data = doc.data();
+
+    const select = document.querySelector(
+      `select[onchange="salvar(${index}, this.value)"]`
+    );
+
+    if (select) {
+      select.value = data.valor;
+      select.title = `Marcado por: ${data.usuario}`;
+    }
+  });
+});
+
+async function exportarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Relatório Final – GPICG", 14, 15);
+
+  doc.setFontSize(11);
+  let y = 30;
+
+  doc.text("Usuário", 14, y);
+  doc.text("Estabelecimento", 60, y);
+  doc.text("Marcação", 180, y);
+
+  y += 6;
+
+  const snapshot = await db.collection("marcacoes").get();
+
+  snapshot.forEach(docSnap => {
+    const index = parseInt(docSnap.id);
+    const data = docSnap.data();
+
+    const restaurante = restaurantes[index]?.nome || "Desconhecido";
+    const usuario = data.usuario || "";
+    const valor = data.valor || "";
+
+    if (!valor) return;
+
+    if (y > 280) {
+      doc.addPage();
+      y = 20;
+    }
+
+    doc.text(usuario, 14, y);
+    doc.text(restaurante.substring(0, 60), 60, y);
+    doc.text(valor, 185, y);
+
+    y += 7;
+  });
+
+  doc.save("relatorio_final_gpicg.pdf");
+}
