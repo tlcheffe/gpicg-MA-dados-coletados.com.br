@@ -14,19 +14,18 @@
   </div>
 </header>
 
-<div style="margin-bottom:15px;">
-  <button onclick="exportarRelatorio()" style="
-    padding:10px 20px;
-    background:#0a4fa3;
-    color:#fff;
-    border:none;
-    border-radius:6px;
-    font-size:14px;
-    cursor:pointer;
-  ">
-    📤 Exportar Relatório Final
-  </button>
-</div>
+<button onclick="exportarPDF()" style="
+  padding:10px 20px;
+  background:#0a4fa3;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  margin-bottom:15px;
+">
+📄 Exportar Relatório em PDF
+</button>
+
 
 <div class="container">
   <table>
@@ -48,6 +47,8 @@
 <footer>
   Grupo de Pesquisa e Identidade Cultural da Gastronomia Maranhense – GPICG
 </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script type="module">
   // Import the functions you need from the SDKs you need
@@ -75,3 +76,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
